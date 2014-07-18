@@ -96,6 +96,24 @@ describe('validation', function() {
 });
 
 describe('normalization', function() {
+  describe('unions in products', function() {
+    it('should return null, if union not matches', function() {
+      assert.equal(null, sigma.validateAndNormalize({
+        field: {b: '123'}
+      }, {
+        type: 'product',
+        components: {
+          field: {
+            type: 'union',
+            variants: {
+              some: {type: 'product', components: {a: 'uint64'}}
+            }
+          }
+        }
+      }));
+    });
+  });
+
   describe('schemas', function() {
     it('should convert atoms that provided by string to oject', function() {
       assert.deepEqual({name: 'atom'}, sigma.validateAndNormalize('atom', {
