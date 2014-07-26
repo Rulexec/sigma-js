@@ -10,6 +10,12 @@ describe('validation', function() {
       assert(sigma.validate({answer: 42}, '()'));
     });
 
+    it('Boolean is checking by !!', function() {
+      assert(sigma.validate(true, 'Boolean'));
+      assert(sigma.validate(false, 'Boolean'));
+      assert(sigma.validate(null, 'Boolean'));
+    });
+
     it('uint64 is string in base 36, that no more than 3w5e11264sgsf and have length <= 13', function() {
       assert(sigma.validate('0', 'uint64'));
       assert(sigma.validate('00000000', 'uint64'));
@@ -96,6 +102,14 @@ describe('validation', function() {
 });
 
 describe('normalization', function() {
+  it('Boolean should convent null and unsigned to false', function() {
+    assert.strictEqual(sigma.validateAndNormalize(true, 'Boolean'), true);
+    assert.strictEqual(sigma.validateAndNormalize(false, 'Boolean'), false);
+
+    assert.strictEqual(sigma.validateAndNormalize(null, 'Boolean'), false);
+    assert.strictEqual(sigma.validateAndNormalize(undefined, 'Boolean'), false);
+  });
+
   describe('unions in products', function() {
     it('should return null, if union not matches', function() {
       assert.equal(null, sigma.validateAndNormalize({
