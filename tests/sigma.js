@@ -20,6 +20,8 @@ describe('validation', function() {
       assert(sigma.validate('0', 'uint64'));
       assert(sigma.validate('00000000', 'uint64'));
 
+      assert(!sigma.validate('', 'uint64'));
+
       // Вообще, в теории можно разрешить хранить числа меньше либо равные 53 бит в Number,
       // но тогда с сериализацией и прочим станет кошмар.
       assert(!sigma.validate(42, 'uint64'));
